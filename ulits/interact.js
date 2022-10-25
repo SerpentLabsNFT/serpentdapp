@@ -25,7 +25,7 @@ export const getTotalMinted = async () => {
 }
 
 export const getNumberMinted = async () => {
-  const NumberMinted = await nftContract.methods.numberMinted(window.ethereum.selectedAddress) .call()
+  const NumberMinted = await nftContract.methods.numberMinted(window.ethereum.selectedAddress).call()
   return NumberMinted
 }
 
@@ -50,12 +50,12 @@ export const isWlMintState = async () => {
 }
 
 export const getWlmintPrice = async () => {
-    const PresalePrice = await nftContract.methods.wlcost().call()
-    return PresalePrice
+  const PresalePrice = await nftContract.methods.wlcost().call()
+  return PresalePrice
 }
 export const getPublicsalePrice = async () => {
-    const PublicsalePrice = await nftContract.methods.cost().call()
-    return PublicsalePrice
+  const PublicsalePrice = await nftContract.methods.cost().call()
+  return PublicsalePrice
 }
 //Set up wl mint
 
@@ -79,18 +79,18 @@ export const wlMint = async (mintAmount) => {
       status: '❌ Invalid Merkle Proof - You are not whitelisted'
     }
   }
-  
-  const wallet =(window.ethereum.selectedAddress)
-  const numberMinted = await nftContract.methods.numberMinted(wallet) .call()
+
+  const wallet = (window.ethereum.selectedAddress)
+  const numberMinted = await nftContract.methods.numberMinted(wallet).call()
   console.log('You have already minted : ' + numberMinted)
-  console.log ('you are going to mint : ' + mintAmount)
+  console.log('you are going to mint : ' + mintAmount)
   const AbleToMint = (config.WlMaxMintAmount - numberMinted)
 
-  if (AbleToMint <  mintAmount){
+  if (AbleToMint < mintAmount) {
     return {
       success: false,
-      status: '📌 You have already minted ' + numberMinted +' NFT/s ' +
-       'You are able to mint only '+ AbleToMint +' more NFT/s ' 
+      status: '📌 You have already minted ' + numberMinted + ' NFT/s ' +
+        'You are able to mint only ' + AbleToMint + ' more NFT/s '
     }
   }
   const nonce = await web3.eth.getTransactionCount(
@@ -99,7 +99,7 @@ export const wlMint = async (mintAmount) => {
   )
 
   // Set up our Ethereum transaction
-  const  eligbel_for_freemint = (numberMinted + mintAmount <= 1)
+  const eligbel_for_freemint = (numberMinted + mintAmount <= 1)
 
 
 
@@ -127,7 +127,7 @@ export const wlMint = async (mintAmount) => {
       status: (
         <a href={`https://etherscan.io/tx/${txHash}`} target="_blank">
           <p>✅ Check out your transaction on Etherscan:</p>
-          <p>{`https://goerli.etherscan.io/tx/${txHash}`}</p>
+          <p>{`https://etherscan.io/tx/${txHash}`}</p>
         </a>
       )
     }
@@ -153,29 +153,29 @@ export const publicMint = async (mintAmount) => {
     window.ethereum.selectedAddress,
     'latest'
   )
-  const wallet =(window.ethereum.selectedAddress)
-  const numberMinted = await nftContract.methods.numberMinted(wallet) .call()
+  const wallet = (window.ethereum.selectedAddress)
+  const numberMinted = await nftContract.methods.numberMinted(wallet).call()
   console.log('You have already minted : ' + numberMinted)
-  console.log ('you are going to mint : ' + mintAmount)
+  console.log('you are going to mint : ' + mintAmount)
   const AbleToMint = (config.maxMintAmount - numberMinted)
 
-  if (AbleToMint <  mintAmount){
+  if (AbleToMint < mintAmount) {
     return {
       success: false,
-      status: '📌 You have already minted ' + numberMinted +' NFT/s ' +
-       'You are able to mint only '+ AbleToMint +' more NFT/s ' 
+      status: '📌 You have already minted ' + numberMinted + ' NFT/s ' +
+        'You are able to mint only ' + AbleToMint + ' more NFT/s '
     }
   }
 
 
-  
+
 
   // Set up our Ethereum transaction
   const tx = {
     to: config.contractAddress,
     from: window.ethereum.selectedAddress,
     value: parseInt(
-      web3.utils.toWei(String(config.publicSalePrice*mintAmount), 'ether')
+      web3.utils.toWei(String(config.publicSalePrice * mintAmount), 'ether')
     ).toString(16), // hex
     gas: String(27000),
     data: nftContract.methods.publicSaleMint(mintAmount).encodeABI(),
